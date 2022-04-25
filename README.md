@@ -2,9 +2,9 @@
 Docker container to build gen3 pokemon decompilation projects.
 
 ## Usage
-Be sure to git clone the pret project you wish to build previously into `decompdirectory`.
+Be sure to previously git clone the [pret project](https://github.com/orgs/pret/repositories) you wish to build and substitute `decompdirectory` with its location.
 
-`docker run -it --mount type=bind,source=decompdirectory,target=/pokedecomp/project/ luisb493/pokedecomp`
+`docker run -it --rm --mount type=bind,source=decompdirectory,target=/pokedecomp/project/ luisb493/pokedecomp`
 
-Now you can proceed to install agbcc.
+Now you can proceed to [install agbcc](https://github.com/pret/pokeemerald/blob/master/INSTALL.md#installation).
 
