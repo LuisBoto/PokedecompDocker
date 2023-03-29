@@ -1,0 +1,32 @@
+name: Upload image to DockerHub
+
+on: 
+  push:
+    branches: 
+      - main
+  workflow_dispatch:
+
+jobs:
+  uploadDockerHub:
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: pokedecomp
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Generate version tag
+        run: echo ::set-output name=version::$(grep "FROM ubuntu:" Dockerfile | grep -Eo "[0-9]+\.[0-9]+")
+        id: generate-tag
+
+      - name: Build Docker image
+        run: docker build -t $IMAGE_NAME .
+
+      - name: Login to DockerHub
+        run: docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.DOCKERHUB_TOKEN }}"
+
+      - name: Push image to DockerHub
+        run: |
+          docker tag $IMAGE_NAME ${{ secrets.DOCKERHUB_USERNAME }}/$IMAGE_NAME:latest
+          docker tag $IMAGE_NAME ${{ secrets.DOCKERHUB_USERNAME }}/$IMAGE_NAME:${{ steps.generate-tag.outputs.version }}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/$IMAGE_NAME:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/$IMAGE_NAME:${{ steps.generate-tag.outputs.version }}
