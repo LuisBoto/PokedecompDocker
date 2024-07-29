@@ -12,10 +12,10 @@ jobs:
     env:
       IMAGE_NAME: pokedecomp
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Generate version tag
-        run: echo ::set-output name=version::$(grep "FROM debian:" Dockerfile | grep -Eo "[a-z]+")
+        run: echo ::set-output name=version::$(grep "FROM debian:" Dockerfile | grep -Eo ":[a-z]+" | cut -c 2-)
         id: generate-tag
 
       - name: Build Docker image
